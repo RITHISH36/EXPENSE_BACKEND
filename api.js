@@ -51,7 +51,7 @@ async function fetchalldata(req,res){
     res.status(500).json({error:err.message})
    }
 }
-app.get('/fetchdatabyusername',fetchdatabyusername)
+app.post('/fetchdatabyusername',fetchdatabyusername)
 
 async function fetchdatabyusername(req,res){
     try{
