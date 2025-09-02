@@ -12,6 +12,7 @@ mongoose.connect("mongodb+srv://rith172203k_db_user:MUjhE4jHoNoEtu8N@cluster0.1u
 .catch(err=>console.log("not connected to db",err))
 
 const expenseschema= new mongoose.Schema({
+    user:{type:String,require:true},
    title:{type:String,require:true},
     amount:{type:Number,require:true}
 })
@@ -22,11 +23,11 @@ const expense=mongoose.model("expenses",expenseschema);
 app.post('/insertdata',insertdata)
 
 async function insertdata(req,res){
-    const {title,amount}=req.body;
+    const {user,title,amount}=req.body;
     console.log(req.body)
-    console.log(title,amount);
+    console.log(user,title,amount);
     
-    const newexpense= new expense({title,amount})
+    const newexpense= new expense({user,title,amount})
 
     try{
         await newexpense.save();
@@ -49,6 +50,19 @@ async function fetchalldata(req,res){
    catch(err){
     res.status(500).json({error:err.message})
    }
+}
+app.get('/fetchdatabyusername',fetchdatabyusername)
+
+async function fetchdatabyusername(req,res){
+    try{
+        const{user}=req.body
+        const get= await expense.find({user:user})
+        console.log(get)
+        res.status(200).json(get)
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
 }
 //TO DELETE DATA//
 app.delete('/deletedata',deletedata)
