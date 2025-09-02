@@ -12,6 +12,7 @@ mongoose.connect("mongodb+srv://rith172203k_db_user:MUjhE4jHoNoEtu8N@cluster0.1u
 .catch(err=>console.log("not connected to db",err))
 
 const expenseschema= new mongoose.Schema({
+    user:{type:String,require:true},
    title:{type:String,require:true},
     amount:{type:Number,require:true}
 })
@@ -22,11 +23,11 @@ const expense=mongoose.model("expenses",expenseschema);
 app.post('/insertdata',insertdata)
 
 async function insertdata(req,res){
-    const {title,amount}=req.body;
+    const {user,title,amount}=req.body;
     console.log(req.body)
-    console.log(title,amount);
+    console.log(user,title,amount);
     
-    const newexpense= new expense({title,amount})
+    const newexpense= new expense({user,title,amount})
 
     try{
         await newexpense.save();
