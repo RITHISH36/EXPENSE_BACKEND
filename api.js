@@ -93,16 +93,5 @@ async function editdata(req,res){
     }
 }
 
-app.get('/getdatabytitle',getdatabytitle)
 
-async function getdatabytitle(req,res){
-    try{
-        const {title}=req.body
-        const find=await expense.find({title})
-        console.log(find)
-    }
-    catch(err){
-        res.status(500).json({error:err.message})
-    }
-}
 app.listen(3000);
