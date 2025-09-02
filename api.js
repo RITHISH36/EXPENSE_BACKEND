@@ -51,6 +51,19 @@ async function fetchalldata(req,res){
     res.status(500).json({error:err.message})
    }
 }
+app.get('/fetchdatabyusername',fetchdatabyusername)
+
+async function fetchdatabyusername(req,res){
+    try{
+        const{user}=req.body
+        const get= await expense.find({user:user})
+        console.log(get)
+        res.status(200).json(get)
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
+}
 //TO DELETE DATA//
 app.delete('/deletedata',deletedata)
 
