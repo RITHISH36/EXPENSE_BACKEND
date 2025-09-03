@@ -31,10 +31,10 @@ app.post('/insertdatauser',insertdatauser)
 async function insertdatauser(req,res){
     try{
         const {username,password}=req.body;
-        const get= await user.find({username:username})
+        const get= await user.findOne({username:username})
         console.log(get);
         if(get.password===password){
-        console.log("data is there")
+        res.status(200).json(get)
     }
         else{
             console.log("no data")
