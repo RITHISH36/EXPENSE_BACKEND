@@ -31,15 +31,20 @@ app.post('/insertdatauser',insertdatauser)
 async function insertdatauser(req,res){
     try{
         const {username,password}=req.body;
-        const newuser=new user({username,password})
-        await newuser.save();
-        res.status(200).send("DATA IS INSERTED")
+        const get= await user.find({username:username})
+        if(get.password===password){
+        console.log("data is there")
+    }
+        else{
+            console.log("no data")
+        }
 
     }
     catch(err){
         res.status(500).json({error:err.message})
     }
 } 
+
 
 //To post the data
 app.post('/insertdata',insertdata)
