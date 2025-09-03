@@ -26,6 +26,13 @@ const expenseschema= new mongoose.Schema({
 
 const expense=mongoose.model("expenses",expenseschema);
 
+//to post the data in //
+app.post('/insertdatauser',insertdatauser)
+async function insertdatauser(req,res){
+    const {username,password}=req.body;
+    console.log(req.body)
+} 
+
 //To post the data
 app.post('/insertdata',insertdata)
 
