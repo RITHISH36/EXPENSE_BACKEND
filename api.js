@@ -37,7 +37,7 @@ async function insertdatauser(req,res){
         res.status(200).json(get)
     }
         else{
-            console.log("no data")
+            res.status(400).send("DATA NOT FOUND")
         }
 
     }
