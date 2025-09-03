@@ -32,6 +32,7 @@ async function insertdatauser(req,res){
     try{
         const {username,password}=req.body;
         const get= await user.find({username:username})
+        console.log(get);
         if(get.password===password){
         console.log("data is there")
     }
