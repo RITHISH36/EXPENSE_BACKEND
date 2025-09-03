@@ -29,8 +29,16 @@ const expense=mongoose.model("expenses",expenseschema);
 //to post the data in //
 app.post('/insertdatauser',insertdatauser)
 async function insertdatauser(req,res){
-    const {username,password}=req.body;
-    console.log(req.body)
+    try{
+        const {username,password}=req.body;
+        const newuser=new user({username,password})
+        await newuser.save();
+        res.status(200).send("DATA IS INSERTED")
+
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
 } 
 
 //To post the data
