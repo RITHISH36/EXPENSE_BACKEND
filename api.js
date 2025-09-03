@@ -11,6 +11,13 @@ mongoose.connect("mongodb+srv://rith172203k_db_user:MUjhE4jHoNoEtu8N@cluster0.1u
 .then(()=>console.log("connected to db"))
 .catch(err=>console.log("not connected to db",err))
 
+
+const userschema= new mongoose.Schema({
+    username:{type:String,require:true},
+    password:{type:String,require:true}
+})
+const user=mongoose.model("user",userschema)
+
 const expenseschema= new mongoose.Schema({
     user:{type:String,require:true},
    title:{type:String,require:true},
