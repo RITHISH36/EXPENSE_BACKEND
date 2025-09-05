@@ -26,8 +26,8 @@ const expenseschema= new mongoose.Schema({
 
 const expense=mongoose.model("expenses",expenseschema);
 
-//to post the data in //
-app.post('/insertdatauser',insertdatauser)
+//to post the data  and check the auth //
+app.post('/dataauthentication',insertdatauser)
 async function insertdatauser(req,res){
     try{
         const {username,password}=req.body;
@@ -45,7 +45,27 @@ async function insertdatauser(req,res){
         res.status(500).json({error:err.message})
     }
 } 
+//TO INSERTDATA TO THE USER DB OR USER INFORMATION//
+app.post('/insertdataofuser',insertdataofuser)
 
+async function insertdataofuser(req,res){
+    const {username,password}=req.body
+    console.log(req.body)
+    const newuser=new user({username,password})
+    try{ 
+        const check=await user.findOne({username})
+        if(!check){
+          await newuser.save();
+          res.status(200).json(newuser)
+        }
+        else{
+            res.status(400).send("Data Already Exist!")
+        }
+    }
+    catch{
+        res.status(500).json({error:err.message})
+    }
+}
 
 //To post the data
 app.post('/insertdata',insertdata)
@@ -53,7 +73,6 @@ app.post('/insertdata',insertdata)
 async function insertdata(req,res){
     const {user,title,amount}=req.body;
     console.log(req.body)
-    console.log(user,title,amount);
     
     const newexpense= new expense({user,title,amount})
 
@@ -68,23 +87,25 @@ async function insertdata(req,res){
 }
 
 //To get the data//
-app.get('/fetchalldata',fetchalldata)
+app.post('/fetchalldata',fetchalldata)
 
 async function fetchalldata(req,res){
+    const{user}=req.body
+    console.log(req.body)
     try{
-    const fetch=await expense.find()
+    const fetch=await expense.find({user:user})
    res.status(200).json(fetch)
 }
    catch(err){
     res.status(500).json({error:err.message})
    }
 }
-app.post('/fetchdatabyusername',fetchdatabyusername)
+app.post('/fetchdatabyname',fetchdatabyname)
 
-async function fetchdatabyusername(req,res){
+async function fetchdatabyname(req,res){
     try{
-        const{user}=req.body
-        const get= await expense.find({user:user})
+        const{title}=req.body
+        const get= await expense.find({title:title})
         console.log(get)
         res.status(200).json(get)
     }
@@ -92,6 +113,46 @@ async function fetchdatabyusername(req,res){
         res.status(500).json({error:err.message})
     }
 }
+//password change user check//
+app.post('/checkuser',checkuser)
+
+async function checkuser(req,res){
+    try{
+        const{username}=req.body
+        const get=await user.findOne({username:username})
+
+        if(get.username===username){
+        res.status(200).json(get)
+    }
+
+    else{
+        res.status(404).send("Data Not Found!")
+    }
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
+}
+//to change password//
+app.put("/changepassword",changepassword)
+async function changepassword(req,res){
+    try{
+        const {ComfirmPassword,username}=req.body
+        
+        const change=await user.findOneAndUpdate({username},{password:ComfirmPassword},{new:true})
+    
+        if(change){
+        res.status(200).json(change)}
+        else{
+            res.status(400).send("error")
+        }
+        
+    }
+    catch(err){
+        res.status(500).json({error:err.message})
+    }
+}
+
 //TO DELETE DATA//
 app.delete('/deletedata',deletedata)
 
